@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 
-import diaryRouter from './routes/diaries.js';
+import diaryRouter from './routes/diaries';
 
 const app = express();
 app.use(express.json());
