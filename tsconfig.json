@@ -2,7 +2,8 @@
 	"compilerOptions": {
 		"rootDir": "./src",
 		"outDir": "./build",
-		"module": "nodenext",
+		"module": "esnext",
+		"moduleResolution": "node",
 		"target": "esnext",
 		"lib": ["esnext"],
 		"types": ["node"],
@@ -13,6 +14,9 @@
 
 		"noUncheckedIndexedAccess": true,
 		"exactOptionalPropertyTypes": true,
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"resolveJsonModule": true,
 
 		"noImplicitReturns": true,
 		"noImplicitOverride": true,
@@ -22,7 +26,7 @@
 		"noPropertyAccessFromIndexSignature": true,
 		"strict": true,
 		"jsx": "react-jsx",
-		"verbatimModuleSyntax": true,
+		"verbatimModuleSyntax": false,
 		"isolatedModules": true,
 		"noUncheckedSideEffectImports": true,
 		"moduleDetection": "force",
