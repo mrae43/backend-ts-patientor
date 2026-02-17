@@ -1,12 +1,5 @@
+import z from 'zod';
 import { NewDiaryEntry, Visibility, Weather } from '../types';
-
-const parseComment = (comment: unknown): string => {
-	if (!comment || !isString(comment)) {
-		throw new Error('Incorrect or missing comment');
-	}
-
-	return comment;
-};
 
 const isDate = (date: string): boolean => {
 	return Boolean(Date.parse(date));
@@ -66,7 +59,7 @@ const toNewDiaryEntry = (object: unknown): NewDiaryEntry => {
 			weather: parseWeather(object.weather),
 			visibility: parseVisibility(object.visibility),
 			date: parseDate(object.date),
-			comment: parseComment(object.comment),
+			comment: z.string().parse(object.comment),
 		};
 
 		return newEntry;
