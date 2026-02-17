@@ -1,10 +1,19 @@
-import express from 'express';
+import express, { Request, Response, NextFunction, Router } from 'express';
 import z from 'zod';
 import diaryService from '../services/diaryService';
-import { NonSensitiveEntries } from '../types';
-import toNewDiaryEntry from '../utils/utilsDiary';
+import { NewDiaryEntry, NonSensitiveEntries, DiaryEntry } from '../types';
+import { NewEntrySchema } from '../utils/utilsDiary';
 
-const router: express.Router = express.Router();
+const router: Router = express.Router();
+
+const newDiaryParser = (req: Request, _res: Response, next: NextFunction) => {
+	try {
+		NewEntrySchema.parse(req.body);
+		next();
+	} catch (error: unknown) {
+		next(error);
+	}
+};
 
 router.get('/:id', (req, res) => {
 	const diary = diaryService.findById(Number(req.params.id));
@@ -20,18 +29,16 @@ router.get('/', (_req, res: express.Response<NonSensitiveEntries[]>) => {
 	res.send(diaryService.getNonSensitiveEntries());
 });
 
-router.post('/', (req, res) => {
-	try {
-		const newDiaryEntry = toNewDiaryEntry(req.body);
-		const addedEntry = diaryService.addDiary(newDiaryEntry);
+router.post(
+	'/',
+	newDiaryParser,
+	(
+		req: Request<unknown, unknown, NewDiaryEntry>,
+		res: Response<DiaryEntry>,
+	) => {
+		const addedEntry = diaryService.addDiary(req.body);
 		res.json(addedEntry);
-	} catch (error: unknown) {
-		if (error instanceof z.ZodError) {
-			res.status(400).send({ error: error.issues });
-		} else {
-			res.status(400).send({ error: 'unknown error' });
-		}
-	}
-});
+	},
+);
 
 export default router;
