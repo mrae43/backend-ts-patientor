@@ -41,3 +41,5 @@ export interface PatientsLog {
 }
 
 export type NonSensitiveLogs = Omit<PatientsLog, 'ssn'>;
+
+export type NewPatientLog = Omit<PatientsLog, 'id'>;

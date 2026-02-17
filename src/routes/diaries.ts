@@ -1,7 +1,7 @@
 import express from 'express';
 import diaryService from '../services/diaryService';
 import { NonSensitiveEntries } from '../types';
-import toNewDiaryEntry from '../utils';
+import toNewDiaryEntry from '../utils/utilsDiary';
 
 const router: express.Router = express.Router();
 
