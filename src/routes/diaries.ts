@@ -20,14 +20,22 @@ router.get('/', (_req, res: express.Response<NonSensitiveEntries[]>) => {
 
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 router.post('/', (req, res) => {
-	const { date, weather, visibility, comment } = req.body;
-	const newDiaryEntry = diaryService.addDiary({
-		date,
-		weather,
-		visibility,
-		comment,
-	});
-	res.json(newDiaryEntry);
+	try {
+		const { date, weather, visibility, comment } = req.body;
+		const newDiaryEntry = diaryService.addDiary({
+			date,
+			weather,
+			visibility,
+			comment,
+		});
+		res.json(newDiaryEntry);
+	} catch (error: unknown) {
+		let errorMessage = 'Something went wrong';
+		if (error instanceof Error) {
+			errorMessage += ' Error: ' + error.message;
+		}
+		res.status(404).send(errorMessage);
+	}
 });
 
 export default router;
