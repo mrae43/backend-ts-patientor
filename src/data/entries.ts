@@ -1,4 +1,4 @@
-import { DiaryEntry, Weather, Visibility } from '../types.js';
+import { DiaryEntry, Weather, Visibility } from '../types';
 
 const diaryEntries: DiaryEntry[] = [
 	{
