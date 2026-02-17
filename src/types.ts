@@ -31,13 +31,21 @@ export interface DiagnosesEntry {
 	latin?: string;
 }
 
+export enum Gender {
+	Male = 'male',
+	Female = 'female',
+	Other = 'other',
+}
+
 export interface PatientsLog {
 	id: string;
 	name: string;
 	dateOfBirth: string;
 	ssn: string;
-	gender: string;
+	gender: Gender;
 	occupation: string;
 }
 
 export type NonSensitiveLogs = Omit<PatientsLog, 'ssn'>;
+
+export type NewPatientLog = Omit<PatientsLog, 'id'>;

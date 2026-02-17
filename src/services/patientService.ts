@@ -1,5 +1,6 @@
+import { v1 as uuid } from 'uuid';
 import patients from '../data/patients';
-import { PatientsLog, NonSensitiveLogs } from '../types';
+import { PatientsLog, NonSensitiveLogs, NewPatientLog } from '../types';
 
 const getPatients = (): PatientsLog[] => {
 	return patients;
@@ -15,8 +16,16 @@ const getNonSensitivePatientLogs = (): NonSensitiveLogs[] => {
 	}));
 };
 
-const addPatient = () => {
-	return null;
+const addPatient = (log: NewPatientLog): PatientsLog => {
+	const id = uuid();
+	const addNewLog = {
+		id: id,
+		...log,
+	};
+
+	patients.push(addNewLog);
+
+	return addNewLog;
 };
 
 export default {
