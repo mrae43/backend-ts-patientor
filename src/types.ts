@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { NewEntrySchema } from './utils/utilsDiary';
+import { NewEntrySchema, NewPatientLogSchema } from './utils';
 
 export enum Weather {
 	Sunny = 'sunny',
@@ -36,15 +36,10 @@ export enum Gender {
 	Other = 'other',
 }
 
-export interface PatientsLog {
+export interface PatientsLog extends NewPatientLog {
 	id: string;
-	name: string;
-	dateOfBirth: string;
-	ssn: string;
-	gender: Gender;
-	occupation: string;
 }
 
 export type NonSensitiveLogs = Omit<PatientsLog, 'ssn'>;
 
-export type NewPatientLog = Omit<PatientsLog, 'id'>;
+export type NewPatientLog = z.infer<typeof NewPatientLogSchema>;
