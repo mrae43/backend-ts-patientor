@@ -12,6 +12,8 @@ export interface DiaryEntry {
 
 export type NonSensitiveEntries = Omit<DiaryEntry, 'comment'>;
 
+export type NewDiaryEntry = Omit<DiaryEntry, 'id'>;
+
 export interface DiagnosesEntry {
 	code: string;
 	name: string;
