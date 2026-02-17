@@ -1,18 +1,6 @@
 import z from 'zod';
 import { NewDiaryEntry, Visibility, Weather } from '../types';
 
-const isDate = (date: string): boolean => {
-	return Boolean(Date.parse(date));
-};
-
-const parseDate = (date: unknown): string => {
-	if (!date || !isString(date) || !isDate(date)) {
-		throw new Error('Incorrect or missing date: ' + date);
-	}
-
-	return date;
-};
-
 const isString = (text: unknown): text is string => {
 	return typeof text === 'string';
 };
@@ -58,7 +46,7 @@ const toNewDiaryEntry = (object: unknown): NewDiaryEntry => {
 		const newEntry: NewDiaryEntry = {
 			weather: parseWeather(object.weather),
 			visibility: parseVisibility(object.visibility),
-			date: parseDate(object.date),
+			date: z.iso.date().parse(object.date),
 			comment: z.string().parse(object.comment),
 		};
 
