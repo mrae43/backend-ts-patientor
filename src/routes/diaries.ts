@@ -15,7 +15,7 @@ const newDiaryParser = (req: Request, _res: Response, next: NextFunction) => {
 	}
 };
 
-const errorMiddleware = (
+export const errorMiddleware = (
 	error: unknown,
 	_req: Request,
 	res: Response,

@@ -3,6 +3,7 @@ import express, { Request, Response, NextFunction, Router } from 'express';
 import patientService from '../services/patientService';
 import { NewPatientLog, NonSensitiveLogs, PatientsLog } from '../types';
 import { NewPatientLogSchema } from '../utils';
+import { errorMiddleware } from './diaries';
 
 const router: Router = express.Router();
 
@@ -30,5 +31,7 @@ router.post(
 		res.json(addedPatient);
 	},
 );
+
+router.use(errorMiddleware);
 
 export default router;
