@@ -1,4 +1,4 @@
-import { NewDiaryEntry, Visibility, Weather } from './types';
+import { NewDiaryEntry, Visibility, Weather } from '../types';
 
 const parseComment = (comment: unknown): string => {
 	if (!comment || !isString(comment)) {
