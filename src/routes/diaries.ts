@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction, Router } from 'express';
 import z from 'zod';
 import diaryService from '../services/diaryService';
 import { NewDiaryEntry, NonSensitiveEntries, DiaryEntry } from '../types';
-import { NewEntrySchema } from '../utils/utilsDiary';
+import { NewEntrySchema } from '../utils';
 
 const router: Router = express.Router();
 
@@ -15,7 +15,7 @@ const newDiaryParser = (req: Request, _res: Response, next: NextFunction) => {
 	}
 };
 
-const errorMiddleware = (
+export const errorMiddleware = (
 	error: unknown,
 	_req: Request,
 	res: Response,

@@ -1,27 +1,37 @@
-import express from 'express';
+import express, { Request, Response, NextFunction, Router } from 'express';
 
 import patientService from '../services/patientService';
-import { NonSensitiveLogs } from '../types';
-import toNewPatientLog from '../utils/utilsPatient';
+import { NewPatientLog, NonSensitiveLogs, PatientsLog } from '../types';
+import { NewPatientLogSchema } from '../utils';
+import { errorMiddleware } from './diaries';
 
-const router: express.Router = express.Router();
+const router: Router = express.Router();
 
-router.get('/', (_req, res: express.Response<NonSensitiveLogs[]>) => {
+const newPatientParser = (req: Request, _res: Response, next: NextFunction) => {
+	try {
+		NewPatientLogSchema.parse(req.body);
+		next();
+	} catch (error: unknown) {
+		next(error);
+	}
+};
+
+router.get('/', (_req, res: Response<NonSensitiveLogs[]>) => {
 	res.send(patientService.getNonSensitivePatientLogs());
 });
 
-router.post('/', (req, res) => {
-	try {
-		const newPatientLog = toNewPatientLog(req.body);
-		const addedPatient = patientService.addPatient(newPatientLog);
+router.post(
+	'/',
+	newPatientParser,
+	(
+		req: Request<unknown, unknown, NewPatientLog>,
+		res: Response<PatientsLog>,
+	) => {
+		const addedPatient = patientService.addPatient(req.body);
 		res.json(addedPatient);
-	} catch (error) {
-		let errorMessage = 'Something went wrong';
-		if (error instanceof Error) {
-			errorMessage += ' Error: ' + error.message;
-		}
-		res.status(404).send(errorMessage);
-	}
-});
+	},
+);
+
+router.use(errorMiddleware);
 
 export default router;
