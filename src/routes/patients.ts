@@ -20,6 +20,13 @@ router.get('/', (_req, res: Response<NonSensitivePatients[]>) => {
 	res.send(patientService.getNonSensitivePatientLogs());
 });
 
+router.get(
+	'/:id',
+	(req: Request<{ id: string }>, res: Response<Patient | null>) => {
+		res.send(patientService.findPatientById(req.params.id));
+	},
+);
+
 router.post(
 	'/',
 	newPatientParser,
