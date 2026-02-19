@@ -4,7 +4,7 @@ import {
 	NewDiaryEntry,
 	Visibility,
 	Weather,
-	NewPatientLog,
+	NewPatient,
 } from './types';
 
 export const NewEntrySchema = z.object({
@@ -18,7 +18,7 @@ const toNewDiaryEntry = (object: unknown): NewDiaryEntry => {
 	return NewEntrySchema.parse(object);
 };
 
-export const NewPatientLogSchema = z.object({
+export const NewPatientSchema = z.object({
 	name: z.string(),
 	dateOfBirth: z.iso.date(),
 	ssn: z.string(),
@@ -26,8 +26,8 @@ export const NewPatientLogSchema = z.object({
 	occupation: z.string(),
 });
 
-const toNewPatientLog = (object: unknown): NewPatientLog => {
-	return NewPatientLogSchema.parse(object);
+const toNewPatientLog = (object: unknown): NewPatient => {
+	return NewPatientSchema.parse(object);
 };
 
 export default { toNewDiaryEntry, toNewPatientLog };

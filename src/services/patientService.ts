@@ -1,12 +1,12 @@
 import { v1 as uuid } from 'uuid';
 import patients from '../data/patients';
-import { PatientsLog, NonSensitiveLogs, NewPatientLog } from '../types';
+import { Patient, NonSensitivePatients, NewPatient } from '../types';
 
-const getPatients = (): PatientsLog[] => {
+const getPatients = ():Patient[] => {
 	return patients;
 };
 
-const getNonSensitivePatientLogs = (): NonSensitiveLogs[] => {
+const getNonSensitivePatientLogs = (): NonSensitivePatients[] => {
 	return patients.map(({ id, name, dateOfBirth, gender, occupation }) => ({
 		id,
 		name,
@@ -16,7 +16,7 @@ const getNonSensitivePatientLogs = (): NonSensitiveLogs[] => {
 	}));
 };
 
-const addPatient = (log: NewPatientLog): PatientsLog => {
+const addPatient = (log: NewPatient): Patient => {
 	const id = uuid();
 	const addNewLog = {
 		id: id,
