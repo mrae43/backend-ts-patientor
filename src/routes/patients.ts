@@ -17,7 +17,7 @@ const newPatientParser = (req: Request, _res: Response, next: NextFunction) => {
 };
 
 router.get('/', (_req, res: Response<NonSensitivePatients[]>) => {
-	res.send(patientService.getNonSensitivePatientLogs());
+	res.send(patientService.getNonSensitivePatients());
 });
 
 router.get(
