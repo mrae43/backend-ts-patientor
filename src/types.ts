@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { NewEntrySchema, NewPatientLogSchema } from './utils';
+import { NewEntrySchema, NewPatientSchema } from './utils';
 
 export enum Weather {
 	Sunny = 'sunny',
@@ -36,10 +36,14 @@ export enum Gender {
 	Other = 'other',
 }
 
-export interface PatientsLog extends NewPatientLog {
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface Entry {}
+
+export interface Patient extends NewPatient {
 	id: string;
+	entries: Entry[];
 }
 
-export type NonSensitiveLogs = Omit<PatientsLog, 'ssn'>;
+export type NonSensitivePatients = Omit<Patient, 'ssn' | 'entries'>;
 
-export type NewPatientLog = z.infer<typeof NewPatientLogSchema>;
+export type NewPatient = z.infer<typeof NewPatientSchema>;
