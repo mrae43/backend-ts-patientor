@@ -2,7 +2,7 @@ import { v1 as uuid } from 'uuid';
 import patients from '../data/patients';
 import { Patient, NonSensitivePatients, NewPatient } from '../types';
 
-const getPatients = ():Patient[] => {
+const getPatients = (): Patient[] => {
 	return patients;
 };
 
@@ -28,8 +28,14 @@ const addPatient = (log: NewPatient): Patient => {
 	return addNewLog;
 };
 
+const findPatientById = (id: string): Patient | undefined => {
+	const patient = patients.find((p) => p.id === id);
+	return patient;
+};
+
 export default {
 	getPatients,
 	addPatient,
 	getNonSensitivePatientLogs,
+	findPatientById,
 };
