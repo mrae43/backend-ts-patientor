@@ -51,6 +51,11 @@ export enum HealthCheckRating {
 	'CriticalRisk' = 3,
 }
 
+export interface HealthCheckEntry extends BaseEntry {
+	type: 'HealthCheck';
+	healthCheckRating: HealthCheckRating;
+}
+
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface Entry {}
 
