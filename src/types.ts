@@ -43,6 +43,14 @@ interface BaseEntry {
 	specialist: string;
 	diagnosisCodes?: Array<Diagnosis['code']>;
 }
+
+export enum HealthCheckRating {
+	'Healthy' = 0,
+	'LowRisk' = 1,
+	'HighRisk' = 2,
+	'CriticalRisk' = 3,
+}
+
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface Entry {}
 
