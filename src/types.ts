@@ -56,8 +56,27 @@ export interface HealthCheckEntry extends BaseEntry {
 	healthCheckRating: HealthCheckRating;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface Entry {}
+export interface HospitalEntry extends BaseEntry {
+	type: 'Hospital';
+	discharge: {
+		date: string;
+		criteria: string;
+	};
+}
+
+export interface OccupationalHealthcareEntry extends BaseEntry {
+	type: 'OccupationalHealthcare';
+	employerName: string;
+	sickLeave?: {
+		startDate: string;
+		endDate: string;
+	};
+}
+
+export type Entry =
+	| HospitalEntry
+	| OccupationalHealthcareEntry
+	| HealthCheckEntry;
 
 export interface Patient extends NewPatient {
 	id: string;
