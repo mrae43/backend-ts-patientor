@@ -24,7 +24,7 @@ export type NonSensitiveEntries = Omit<DiaryEntry, 'comment'>;
 
 export type NewDiaryEntry = z.infer<typeof NewEntrySchema>;
 
-export interface DiagnosesEntry {
+export interface Diagnosis {
 	code: string;
 	name: string;
 	latin?: string;
@@ -36,6 +36,13 @@ export enum Gender {
 	Other = 'other',
 }
 
+interface BaseEntry {
+	id: string;
+	description: string;
+	date: string;
+	specialist: string;
+	diagnosisCodes?: Array<Diagnosis['code']>;
+}
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface Entry {}
 
