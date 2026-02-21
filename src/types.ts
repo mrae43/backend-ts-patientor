@@ -1,28 +1,5 @@
 import { z } from 'zod';
-import { NewEntrySchema, NewPatientSchema } from './utils';
-
-export enum Weather {
-	Sunny = 'sunny',
-	Rainy = 'rainy',
-	Cloudy = 'cloudy',
-	Stormy = 'stormy',
-	Windy = 'windy',
-}
-
-export enum Visibility {
-	Great = 'great',
-	Good = 'good',
-	Ok = 'ok',
-	Poor = 'poor',
-}
-
-export interface DiaryEntry extends NewDiaryEntry {
-	id: number;
-}
-
-export type NonSensitiveEntries = Omit<DiaryEntry, 'comment'>;
-
-export type NewDiaryEntry = z.infer<typeof NewEntrySchema>;
+import { addNewEntrySchema, NewPatientSchema } from './utils';
 
 export interface Diagnosis {
 	code: string;
@@ -86,3 +63,5 @@ export interface Patient extends NewPatient {
 export type NonSensitivePatients = Omit<Patient, 'ssn' | 'entries'>;
 
 export type NewPatient = z.infer<typeof NewPatientSchema>;
+
+export type NewEntry = z.infer<typeof addNewEntrySchema>;

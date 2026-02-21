@@ -1,22 +1,5 @@
 import z from 'zod';
-import {
-	Gender,
-	NewDiaryEntry,
-	Visibility,
-	Weather,
-	NewPatient,
-} from './types';
-
-export const NewEntrySchema = z.object({
-	weather: z.enum(Weather),
-	visibility: z.enum(Visibility),
-	date: z.iso.date(),
-	comment: z.string(),
-});
-
-const toNewDiaryEntry = (object: unknown): NewDiaryEntry => {
-	return NewEntrySchema.parse(object);
-};
+import { Gender, NewPatient, HealthCheckRating, NewEntry } from './types';
 
 export const NewPatientSchema = z.object({
 	name: z.string(),
@@ -30,4 +13,44 @@ const toNewPatientLog = (object: unknown): NewPatient => {
 	return NewPatientSchema.parse(object);
 };
 
-export default { toNewDiaryEntry, toNewPatientLog };
+export const addNewEntrySchema = z.discriminatedUnion('type', [
+	z.object({
+		type: z.literal('HealthCheck'),
+		description: z.string(),
+		date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+		specialist: z.string(),
+		diagnosisCodes: z.array(z.string()).optional(),
+		healthCheckRating: z.enum(HealthCheckRating),
+	}),
+	z.object({
+		type: z.literal('Hospital'),
+		description: z.string(),
+		date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+		specialist: z.string(),
+		diagnosisCodes: z.array(z.string()).optional(),
+		discharge: z.object({
+			date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+			criteria: z.string(),
+		}),
+	}),
+	z.object({
+		type: z.literal('OccupationalHealthcare'),
+		description: z.string(),
+		date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+		specialist: z.string(),
+		diagnosisCodes: z.array(z.string()).optional(),
+		employerName: z.string(),
+		sickLeave: z
+			.object({
+				startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+				endDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+			})
+			.optional(),
+	}),
+]);
+
+const toAddNewEntry = (object: unknown): NewEntry => {
+	return addNewEntrySchema.parse(object);
+};
+
+export default { toNewPatientLog, toAddNewEntry };
