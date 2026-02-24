@@ -1,56 +1,77 @@
-import z from 'zod';
-import { Gender, NewPatient, HealthCheckRating, NewEntry } from './types';
+import { z } from 'zod';
+import { Gender, HealthCheckRating, EntryType } from './types';
 
-export const NewPatientSchema = z.object({
+export const diagnoseSchema = z.object({
+	code: z.string(),
 	name: z.string(),
-	dateOfBirth: z.iso.date(),
-	ssn: z.string(),
-	gender: z.enum(Gender),
-	occupation: z.string(),
+	latin: z.string().optional(),
 });
 
-const toNewPatientLog = (object: unknown): NewPatient => {
-	return NewPatientSchema.parse(object);
-};
+export type DiagnoseSchema = z.infer<typeof diagnoseSchema>;
 
-export const addNewEntrySchema = z.discriminatedUnion('type', [
-	z.object({
-		type: z.literal('HealthCheck'),
-		description: z.string(),
+export const newPatientSchema = z.object({
+	name: z.string().min(1),
+	dateOfBirth: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+	ssn: z.string().min(1),
+	gender: z.enum(Gender),
+	occupation: z.string().min(1),
+});
+
+export type NewPatient = z.infer<typeof newPatientSchema>;
+
+const baseEntrySchema = z.object({
+	description: z.string(),
+	date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+	specialist: z.string(),
+	diagnosisCodes: z.array(z.string()).optional(),
+});
+
+const healthCheckEntrySchema = baseEntrySchema.extend({
+	type: z.literal(EntryType.HealthCheck),
+	healthCheckRating: z.enum(HealthCheckRating),
+});
+
+export type HealthCheckEntrySchema = z.infer<typeof healthCheckEntrySchema>;
+
+const hospitalEntrySchema = baseEntrySchema.extend({
+	type: z.literal(EntryType.Hospital),
+	discharge: z.object({
 		date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-		specialist: z.string(),
-		diagnosisCodes: z.array(z.string()).optional(),
-		healthCheckRating: z.enum(HealthCheckRating),
+		criteria: z.string(),
 	}),
-	z.object({
-		type: z.literal('Hospital'),
-		description: z.string(),
-		date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-		specialist: z.string(),
-		diagnosisCodes: z.array(z.string()).optional(),
-		discharge: z.object({
-			date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-			criteria: z.string(),
-		}),
-	}),
-	z.object({
-		type: z.literal('OccupationalHealthcare'),
-		description: z.string(),
-		date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-		specialist: z.string(),
-		diagnosisCodes: z.array(z.string()).optional(),
-		employerName: z.string(),
-		sickLeave: z
-			.object({
-				startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-				endDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-			})
-			.optional(),
-	}),
+});
+
+export type HospitalEntrySchema = z.infer<typeof hospitalEntrySchema>;
+
+const occupationalHealthcareEntrySchema = baseEntrySchema.extend({
+	type: z.literal(EntryType.OccupationalHealthcare),
+	employerName: z.string(),
+	sickLeave: z
+		.object({
+			startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+			endDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+		})
+		.optional(),
+});
+
+export type OccupationalHealthcareEntrySchema = z.infer<
+	typeof occupationalHealthcareEntrySchema
+>;
+
+export const newEntrySchema = z.discriminatedUnion('type', [
+	healthCheckEntrySchema,
+	hospitalEntrySchema,
+	occupationalHealthcareEntrySchema,
 ]);
 
-const toAddNewEntry = (object: unknown): NewEntry => {
-	return addNewEntrySchema.parse(object);
+export type NewEntry = z.infer<typeof newEntrySchema>;
+
+export const toNewPatient = (object: unknown): NewPatient => {
+	return newPatientSchema.parse(object);
 };
 
-export default { toNewPatientLog, toAddNewEntry };
+export const toNewEntry = (object: unknown): NewEntry => {
+	return newEntrySchema.parse(object);
+};
+
+export default { toNewPatient, toNewEntry };
