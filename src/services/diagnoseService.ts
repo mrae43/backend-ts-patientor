@@ -1,8 +1,8 @@
 import diagoneses from '../data/diagnoses';
 
-import type { Diagnosis } from '../types';
+import type { Diagnose } from '../types';
 
-const getDiagnoses = (): Diagnosis[] => {
+const getDiagnoses = (): Diagnose[] => {
 	return diagoneses;
 };
 

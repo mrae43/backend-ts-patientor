@@ -1,6 +1,6 @@
-import { Diagnosis } from '../types';
+import { Diagnose } from '../types';
 
-const diagoneses: Diagnosis[] = [
+const diagoneses: Diagnose[] = [
 	{
 		code: 'M24.2',
 		name: 'Disorder of ligament',
