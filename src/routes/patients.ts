@@ -50,11 +50,22 @@ router.post(
 
 router.post(
 	'/:id/entries',
-	(req: Request<{ id: string }>, res: Response<Entry>) => {
-		const id = req.params.id;
-		const newEntry = toNewEntry(req.body);
-		const createdEntry = patientService.addNewEntryToPatient(id, newEntry);
-		return res.status(201).json(createdEntry);
+	(req: Request<{ id: string }>, res: Response<Entry | { error: string }>) => {
+		try {
+			const id = req.params.id;
+			const newEntry = toNewEntry(req.body);
+			const createdEntry = patientService.addNewEntryToPatient(id, newEntry);
+			return res.status(201).json(createdEntry);
+		} catch (error: unknown) {
+			if (error instanceof z.ZodError) {
+				return res.status(400).json({
+					error: 'Validation failed',
+				});
+			}
+			return res.status(400).json({
+				error: (error as Error).message || 'Invalid data',
+			});
+		}
 	},
 );
 
